@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="software.yesaya.sajo.tasks.ui.list.TasksFragment">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="viewModel"
+            type="software.yesaya.sajo.tasks.ui.list.TasksViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <software.yesaya.sajo.utils.ScrollChildSwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:onRefreshListener="@{viewModel::refresh}"
+            app:refreshing="@{viewModel.dataLoading}">
+
+            <RelativeLayout
+                android:id="@+id/tasks_container_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/tasks_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.empty ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        android:id="@+id/filtering_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/list_item_padding"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginRight="@dimen/list_item_padding"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:gravity="center_vertical"
+                        android:text="@{context.getString(viewModel.currentFilteringLabel)}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/tasks_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:items="@{viewModel.tasks}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/no_tasks_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.empty ? View.VISIBLE : View.GONE}">
+
+                    <ImageView
+                        android:id="@+id/no_tasks_icon"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center"
+                        android:src="@{ContextCompat.getDrawable(context, viewModel.noTaskIconRes)}"
+                        android:contentDescription="@string/no_tasks_image_content_description" />
+
+                    <TextView
+                        android:id="@+id/no_tasks_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/list_item_padding"
+                        android:text="@{context.getString(viewModel.noTasksLabel)}" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </software.yesaya.sajo.utils.ScrollChildSwipeRefreshLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_task_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_add"
+            app:fabSize="normal"
+            app:layout_anchor="@id/refresh_layout"
+            app:layout_anchorGravity="bottom|right|end" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

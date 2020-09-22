@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="colorPrimary">#002022</color>
+    <color name="text_light">#ffffffff</color>
+
+    <color name="bulbColor">#757575</color>
+</resources>
